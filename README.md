@@ -42,3 +42,42 @@ printf("%s|%s|%s|%s|%s|%s|%s\n", patientID, observationDate, resultsName, result
  
  // Parse the HL7 message 
  parseHL7Message(hl7Message)
+
+
+ //SQL BELOW
+
+ @echo off 
+setlocal enabledelayedexpansion 
+
+set "Aaron=root" 
+set "MIEPass23=root" 
+set "HL7Parsing=hl7_db" 
+set "HL7Results=hl7_results" 
+
+//Create MySQL database and table 
+mysql -u %Aaron% -p%MIEPass23% -e "CREATE DATABASE IF NOT EXISTS %HL7Parsing%;" 
+mysql -u %Aaron% -p%MIEPass23% %HL7Parsing% -e "CREATE TABLE IF NOT EXISTS %HL7Results% ( 
+
+	PatientID VARCHAR(255), 
+	ObservationDate VARCHAR(255), 
+	ResultsName VARCHAR(255), 
+	ResultsValue VARCHAR(255), 
+	ResultsUnit VARCHAR(255), 
+	ResultsRange VARCHAR(255), 
+	ResultsFlag VARCHAR(255) 
+);" 
+
+//Process HL7 files in the directory 
+	mysql -u %Aaron% -p%MIEPass23% %HL7Parsing% -e "INSERT INTO %HL7Results% VALUES;"
+
+	) 
+
+) 
+
+echo Processing completed. 
+
+:: Example Queries 
+ 
+SELECT * FROM %HL7Results% WHERE ResultsName = 'pH'
+ 
+SELECT * FROM %HL7Results% WHERE ResultsValue > 10; 
